@@ -1,0 +1,24 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: latest
+    commands:
+      - echo "Installing Terraform..."
+      - yum install -y wget unzip
+      - wget https://releases.hashicorp.com/terraform/1.9.3/terraform_1.9.3_linux_amd64.zip
+      - unzip terraform_1.9.3_linux_amd64.zip
+      - mv terraform /usr/local/bin/
+      - terraform -version
+
+  build:
+    commands:
+      - echo "Running Terraform Init"
+      - terraform init
+      - echo "Running Terraform Apply"
+      - terraform apply -auto-approve
+
+artifacts:
+  files:
+    - "**/*"
