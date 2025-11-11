@@ -17,7 +17,8 @@ phases:
       - echo "Running Terraform Init"
       - terraform init
       - echo "Running Terraform Apply"
-      - terraform destroy -auto-approve
+      - terraform apply -auto-approve
+
 
 artifacts:
   files:
