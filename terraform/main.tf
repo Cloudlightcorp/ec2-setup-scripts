@@ -15,16 +15,14 @@ provider "aws" {
 }
 
 ###########################################
-# EC2 INSTANCE (DEFAULT SETTINGS)
+# EC2 Instance (using existing key pair)
 ###########################################
-resource "aws_instance" "test_ec2" {
+resource "aws_instance" "project1_ec2" {
   ami           = "ami-0c55b159cbfafe1f0" # Amazon Linux 2 (us-west-2)
   instance_type = "t2.micro"
-
-  # Important: no key pair
-  key_name = null
+  key_name      = "project_1"              # existing key pair name
 
   tags = {
-    Name = "cloudlightcorp-test-ec2"
+    Name = "project1-ec2"
   }
 }
