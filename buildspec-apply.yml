@@ -2,8 +2,6 @@ version: 0.2
 
 phases:
   install:
-    runtime-versions:
-      python: latest
     commands:
       - echo "Installing Terraform..."
       - yum install -y wget unzip
@@ -12,14 +10,18 @@ phases:
       - mv terraform /usr/local/bin/
       - terraform -version
 
+  pre_build:
+    commands:
+      - echo "Setting executable permission for install script..."
+      - chmod +x scripts/install_dev_tools.sh
+
   build:
     commands:
-      - echo "Running Terraform Init"
+      - echo "Starting Terraform Init"
       - terraform init
-      - echo "Running Terraform Apply"
+      - echo "Applying Terraform"
       - terraform apply -auto-approve
 
-
-artifacts:
-  files:
-    - "**/*"
+  post_build:
+    commands:
+      - echo "✅ Terraform Apply completed successfully."
