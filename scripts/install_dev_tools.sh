@@ -29,14 +29,12 @@ yum install -y jenkins
 systemctl enable jenkins
 systemctl start jenkins
 
-echo "✅ Saving installed versions"
-{
-  echo "Git: $(git --version)"
-  echo "Python: $(python3 --version)"
-  echo "Java: $(java -version 2>&1)"
-  echo "Node: $(node -v)"
-  echo "Dotnet: $(dotnet --version)"
-  echo "Jenkins: $(rpm -q jenkins)"
-} > /opt/install_versions.txt
+echo "===== INSTALLED SOFTWARE VERSIONS ====="
+git --version
+python3 --version
+java -version
+node -v
+dotnet --version
+jenkins --version
 
 echo "✅ DONE — script finished successfully"
