@@ -23,9 +23,8 @@ phases:
       - terraform apply -auto-approve
 
   post_build:
-  commands:
-    - echo "Fetching EC2 console output for installed versions..."
-    - INSTANCE_ID=$(aws ec2 describe-instances --filters "Name=tag:Project,Values=terraform-automation" --query "Reservations[].Instances[].InstanceId" --output text)
-    - aws ec2 get-console-output --instance-id $INSTANCE_ID --output text
-    - echo "✅ Printed software versions from EC2."
-
+    commands:
+      - echo "Fetching EC2 console output for installed versions..."
+      - INSTANCE_ID=$(aws ec2 describe-instances --filters "Name=tag:Project,Values=terraform-automation" --query "Reservations[].Instances[].InstanceId" --output text)
+      - aws ec2 get-console-output --instance-id $INSTANCE_ID --output text
+      - echo "✅ Printed software versions from EC2."
