@@ -25,6 +25,10 @@ phases:
   post_build:
     commands:
       - echo "Fetching EC2 console output for installed versions..."
-      - INSTANCE_ID=$(aws ec2 describe-instances --filters "Name=tag:Project,Values=terraform-automation" --query "Reservations[].Instances[].InstanceId" --output text)
-      - aws ec2 get-console-output --instance-id $INSTANCE_ID --output text
+      - INSTANCE_ID=$(aws ec2 describe-instances \
+          --filters "Name=tag:Project,Values=terraform-automation" \
+          --query "sort_by(Reservations[].Instances[], &LaunchTime)[-1].InstanceId" \
+          --output text)
+      - aws ec2 get-console-output --instance-id "$INSTANCE_ID" --output text
       - echo "✅ Printed software versions from EC2."
+
