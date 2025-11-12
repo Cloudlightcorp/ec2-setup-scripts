@@ -28,6 +28,7 @@ provider "aws" {
 # EC2 Instance (using existing key pair)
 ###########################################
 resource "aws_instance" "project1_ec2" {
+  count         = 2                                 # <-- creates 2 instances
   ami           = "ami-063fd45469b67083e"  # Amazon Linux 2 AMI (Oregon)
   instance_type = "t3.micro"
   key_name      = "project_1"              # existing key pair name
