@@ -3,7 +3,7 @@ version: 0.2
 phases:
   install:
     commands:
-      - echo "Installing Terraform..."
+      - echo "Installing Terraform"
       - yum install -y wget unzip
       - wget https://releases.hashicorp.com/terraform/1.9.3/terraform_1.9.3_linux_amd64.zip
       - unzip terraform_1.9.3_linux_amd64.zip
@@ -12,20 +12,21 @@ phases:
 
   pre_build:
     commands:
-      - echo "Setting executable permission for install script..."
+      - echo "Making install script executable"
       - chmod +x scripts/install_dev_tools.sh
 
   build:
     commands:
-      - echo "Starting Terraform Init"
+      - echo "Running terraform init"
       - terraform init
-      - echo "Applying Terraform"
+      - echo "Running terraform apply"
       - terraform apply -auto-approve
 
   post_build:
     commands:
-      - echo "Fetching EC2 console output for installed versions..."
-      - INSTANCE_ID=$(aws ec2 describe-instances --filters "Name=tag:Project,Values=terraform-automation" --query "sort_by(Reservations[].Instances[], &LaunchTime)[-1].InstanceId" --output text)
-      - echo "Selected instance: $INSTANCE_ID"
+      - echo "Fetching EC2 instance ID"
+      - INSTANCE_ID=$(aws ec2 describe-instances --filters "Name=tag:Project,Values=terraform-automation" --query "Reservations[0].Instances[0].InstanceId" --output text)
+      - echo "Instance ID = $INSTANCE_ID"
+      - echo "Fetching EC2 console output"
       - aws ec2 get-console-output --instance-id "$INSTANCE_ID" --output text
-      - echo "✅ Printed software versions from EC2."
+      - echo "✅ Finished printing output"
