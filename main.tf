@@ -4,9 +4,9 @@
 
 terraform {
   backend "s3" {
-    bucket = "terraform-project1-state-pavithra"   # <-- change to your bucket name
-    key    = "ec2-project/terraform.tfstate"       # file name inside S3 bucket
-    region = "us-west-2"                           # Oregon
+    bucket = "terraform-project1-state-pavithra"
+    key    = "ec2-project/terraform.tfstate"
+    region = "us-west-2"
   }
 
   required_providers {
@@ -25,15 +25,20 @@ provider "aws" {
 }
 
 ###########################################
-# EC2 Instance (using existing key pair)
+# EC2 Instance Creation (2 Instances)
 ###########################################
 resource "aws_instance" "project1_ec2" {
-  count         = 2                                 # <-- creates 2 instances
-  ami           = "ami-063fd45469b67083e"  # Amazon Linux 2 AMI (Oregon)
+  count         = 2
+  ami           = "ami-063fd45469b67083e"   # Amazon Linux 2 (us-west-2)
   instance_type = "t3.micro"
-  key_name      = "project_1"              # existing key pair name
+  key_name      = "project_1"
+
+  # Run installation script during instance initialization
+  user_data = file("${path.module}/scripts/install_dev_tools.sh")
 
   tags = {
-    Name = "project1-ec2"
+    Name      = "dev-tools-ec2-${count.index + 1}"
+    Project   = "terraform-automation"
+    ManagedBy = "Terraform"
   }
 }
