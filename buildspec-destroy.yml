@@ -12,6 +12,11 @@ phases:
 
   build:
     commands:
-      - echo "Running Terraform Destroy"
+      - echo "Starting Terraform Init"
       - terraform init
+      - echo "Destroying Terraform resources"
       - terraform destroy -auto-approve
+
+  post_build:
+    commands:
+      - echo "🗑️ Terraform Destroy completed successfully."
