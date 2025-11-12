@@ -35,6 +35,7 @@ resource "aws_instance" "project1_ec2" {
 
   # Run installation script during instance initialization
   user_data = file("${path.module}/scripts/install_dev_tools.sh")
+  user_data_replace_on_change = true   
 
   tags = {
     Name      = "dev-tools-ec2-${count.index + 1}"
