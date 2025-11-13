@@ -29,7 +29,7 @@ provider "aws" {
 ###########################################
 resource "aws_instance" "project1_ec2" {
   count         = 2
-  ami           = "ami-0caef02b518350c8b"   # Amazon Linux 2023
+  ami           = "ami-04f9aa2b7c7091927"   # Amazon Linux 2023
   instance_type = "t3.micro"
   key_name      = "project_1"
 
