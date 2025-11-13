@@ -2,38 +2,35 @@
 exec > /var/log/user_data.log 2>&1
 set -e
 
-echo "⏳ Waiting for yum..."
-sleep 25
-yum update -y
+echo "⏳ Updating system..."
+dnf update -y
 
 echo "Installing Git & Python"
-yum install -y git python3
+dnf install -y git python3
 
-echo "Installing Java 11 (Corretto)"
-amazon-linux-extras enable corretto11
-yum install -y java-11-amazon-corretto
+echo "Installing Java (Amazon Corretto 17)"
+dnf install -y java-17-amazon-corretto-devel
 
-echo "Installing Node.js"
-curl -fsSL https://rpm.nodesource.com/setup_18.x | bash -
-yum install -y nodejs
+echo "Installing Node.js 18"
+dnf install -y nodejs-18*
 
-echo "Installing .NET 6 SDK"
-rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm
-yum install -y dotnet-sdk-6.0
+echo "Installing .NET SDK 6"
+dnf install -y dotnet-sdk-6.0
 
 echo "Installing Jenkins"
 wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
 rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
-yum install -y jenkins
+dnf install -y jenkins
 
-echo "Saving versions..."
+echo "Saving installed versions..."
 {
+  echo "=== INSTALLED VERSIONS ==="
   git --version
   python3 --version
-  java -version
+  java -version 2>&1 | head -n 1
   node -v
   dotnet --version
-  jenkins --version
+  jenkins --version 2>&1
 } > /opt/install_versions.txt
 
-echo "DONE"
+echo "DONE 🚀"
