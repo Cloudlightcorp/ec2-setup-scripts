@@ -18,24 +18,23 @@ terraform {
 }
 
 ###########################################
-# Provider Configuration
+# Provider
 ###########################################
 provider "aws" {
   region = "us-west-2"
 }
 
 ###########################################
-# EC2 Instance Creation (2 Instances)
+# EC2 Instances (2) - Amazon Linux 2023
 ###########################################
 resource "aws_instance" "project1_ec2" {
   count         = 2
-  ami           = "ami-063fd45469b67083e"   # Amazon Linux 2 (us-west-2)
+  ami           = "ami-0caef02b518350c8b"   # Amazon Linux 2023
   instance_type = "t3.micro"
   key_name      = "project_1"
 
-  # Run installation script during instance initialization
   user_data = file("${path.module}/scripts/install_dev_tools.sh")
-  user_data_replace_on_change = true   
+  user_data_replace_on_change = true
 
   tags = {
     Name      = "dev-tools-ec2-${count.index + 1}"
