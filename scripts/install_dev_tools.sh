@@ -21,16 +21,3 @@ echo "Installing Jenkins"
 wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
 rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
 dnf install -y jenkins
-
-echo "Saving installed versions..."
-{
-  echo "=== INSTALLED VERSIONS ==="
-  git --version
-  python3 --version
-  java -version 2>&1 | head -n 1
-  node -v
-  dotnet --version
-  jenkins --version 2>&1
-} > /opt/install_versions.txt
-
-echo "DONE 🚀"
