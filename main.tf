@@ -37,7 +37,7 @@ resource "aws_instance" "project1_ec2" {
   user_data_replace_on_change = true
 
   tags = {
-    Name      = "dev-tools-ec2-${count.index + 1}"
+    Name      = "lab-environment-ec2-${count.index + 1}"
     Project   = "terraform-automation"
     ManagedBy = "Terraform"
   }
