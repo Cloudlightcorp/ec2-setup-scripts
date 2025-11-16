@@ -31,7 +31,7 @@ resource "aws_instance" "project1_ec2" {
   count         = 2
   ami           = "ami-04f9aa2b7c7091927"   # Amazon Linux 2023
   instance_type = "t3.micro"
-  key_name      = "project_1"
+  key_name      = "Lab_env_Linux"
 
   user_data = file("${path.module}/scripts/install_dev_tools.sh")
   user_data_replace_on_change = true
