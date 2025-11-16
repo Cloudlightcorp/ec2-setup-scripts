@@ -3,36 +3,30 @@ version: 0.2
 phases:
   install:
     commands:
-      - "echo Installing Terraform..."
-      - "yum install -y wget unzip jq"
-      - "wget https://releases.hashicorp.com/terraform/1.9.3/terraform_1.9.3_linux_amd64.zip"
-      - "unzip terraform_1.9.3_linux_amd64.zip"
-      - "mv terraform /usr/local/bin/"
-      - "terraform -version"
+      - echo "Installing Terraform"
+      - yum install -y wget unzip
+      - wget https://releases.hashicorp.com/terraform/1.9.3/terraform_1.9.3_linux_amd64.zip
+      - unzip terraform_1.9.3_linux_amd64.zip
+      - mv terraform /usr/local/bin/
+      - terraform -version
+
+  pre_build:
+    commands:
+      - echo "Making install script executable"
+      - chmod +x scripts/install_dev_tools.sh
 
   build:
     commands:
-      - "echo Running terraform init..."
-      - "terraform init"
-      - "echo Running terraform apply..."
-      - "terraform apply -auto-approve"
-      - "echo Extracting Windows instance IDs..."
-      - "INSTANCE_IDS=$(terraform output -json windows_instance_ids | jq -r '.[]')"
-      - "echo Instances: $INSTANCE_IDS"
-      - "echo Copying script..."
-      - "cp scripts/install_windows_tools.ps1 install_windows_tools.ps1"
-      - "echo Uploading script to S3..."
-      - "aws s3 cp install_windows_tools.ps1 s3://terraform-project1-state-pavithra/windows/install_windows_tools.ps1"
-      - >
-        for ID in $INSTANCE_IDS; do 
-          aws ssm send-command 
-            --instance-ids "$ID" 
-            --document-name "AWS-RunPowerShellScript" 
-            --parameters commands=["powershell.exe -ExecutionPolicy Bypass -File C:\\\\install_windows_tools.ps1"] 
-            --comment "Install Windows apps" 
-            --timeout-seconds 3600;
-        done
+      - echo "Running terraform init"
+      - terraform init
+      - echo "Running terraform apply"
+      - terraform apply -auto-approve
 
   post_build:
     commands:
-      - "echo ✔ Windows EC2 created AND SSM installation triggered successfully."
+      - echo "Fetching EC2 instance ID"
+      - INSTANCE_ID=$(aws ec2 describe-instances --filters "Name=tag:Project,Values=terraform-automation" --query "Reservations[0].Instances[0].InstanceId" --output text)
+      - echo "Instance ID = $INSTANCE_ID"
+      - echo "Fetching EC2 console output"
+      - aws ec2 get-console-output --instance-id "$INSTANCE_ID" --output text
+      - echo "✅ Finished printing output"
