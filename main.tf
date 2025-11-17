@@ -27,7 +27,7 @@ provider "aws" {
 ###########################################
 # EC2 Instances (2) - Amazon Linux 2023
 ###########################################
-resource "aws_instance" "project1_ec2" {
+resource "aws_instance" "linux_ec2" {
   count         = 2
   ami           = "ami-04f9aa2b7c7091927"   # Amazon Linux 2023
   instance_type = "t3.micro"
