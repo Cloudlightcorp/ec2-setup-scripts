@@ -5,7 +5,7 @@
 terraform {
   backend "s3" {
     bucket = "automated-lab-ec2-instances"
-    key    = "linux-ec2-project/terraform.tfstate"
+    key    = "AutomatedLab-ec2-state-Linux/terraform.tfstate"
     region = "us-west-2"
   }
 
