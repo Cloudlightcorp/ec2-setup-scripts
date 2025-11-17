@@ -4,8 +4,8 @@
 
 terraform {
   backend "s3" {
-    bucket = "terraform-project1-state-pavithra"
-    key    = "ec2-project/terraform.tfstate"
+    bucket = "automated-lab-ec2-instances"
+    key    = "linux-ec2-project/terraform.tfstate"
     region = "us-west-2"
   }
 
